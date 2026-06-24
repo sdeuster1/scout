@@ -37,10 +37,7 @@ app.add_middleware(
 
 client = anthropic.Anthropic()
 
-SLACK_WEBHOOK_URL = os.environ.get(
-    "SLACK_WEBHOOK_URL",
-    "https://hooks.slack.com/services/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",
-)
+SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "")
 SCOUT_URL = os.environ.get("SCOUT_URL", "http://localhost:5173")
 
 
