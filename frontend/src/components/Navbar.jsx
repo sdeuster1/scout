@@ -12,8 +12,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
         <div className="flex items-center justify-between h-12">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#00D68F]" />
-              <span className="text-[15px] font-semibold tracking-tight text-white">Scout</span>
+              <span className="w-2 h-2 rounded-full bg-[#c4b1f9]" />
+              <span className="text-[15px] font-semibold tracking-tight text-[#fffbf4]">Scout</span>
             </div>
             <span className="text-[11px] text-[#8899AA] hidden sm:inline">
               pre-call intelligence for LATAM SDRs
@@ -26,8 +26,8 @@ export default function Navbar({ activeTab, setActiveTab }) {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3 py-1.5 rounded-md text-[12px] transition-colors ${
                   activeTab === tab.id
-                    ? 'bg-white/[0.1] text-white'
-                    : 'text-[#8899AA] hover:text-white hover:bg-white/[0.05]'
+                    ? 'bg-[#c4b1f9]/[0.12] text-[#c4b1f9]'
+                    : 'text-[#8899AA] hover:text-[#fffbf4] hover:bg-white/[0.05]'
                 }`}
               >
                 {tab.label}

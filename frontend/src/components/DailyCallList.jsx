@@ -3,15 +3,15 @@ import { api } from '../api'
 
 const outcomes = [
   { label: 'SQL', color: 'bg-[#00D68F] text-[#0B1B2B]' },
-  { label: 'Connected', color: 'bg-amber-400 text-[#0B1B2B]' },
+  { label: 'Connected', color: 'bg-[#ffe27c] text-[#0B1B2B]' },
   { label: 'Gatekeeper', color: 'bg-red-400 text-white' },
   { label: 'No answer', color: 'bg-white/[0.1] text-[#8899AA]' },
 ]
 
 function ScoreBadge({ score }) {
   let color = 'bg-red-400/15 text-red-400'
-  if (score >= 8) color = 'bg-[#00D68F]/15 text-[#00D68F]'
-  else if (score >= 5) color = 'bg-amber-400/15 text-amber-400'
+  if (score >= 8) color = 'bg-[#c4b1f9]/15 text-[#c4b1f9]'
+  else if (score >= 5) color = 'bg-[#ffe27c]/15 text-[#ffe27c]'
   return (
     <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-semibold ${color}`}>
       {score}/10
@@ -86,11 +86,11 @@ export default function DailyCallList({
       {briefs.length === 0 && (
         <div className="text-center py-20">
           <div className="text-5xl mb-4">📋</div>
-          <h2 className="text-lg font-medium text-white mb-2">Upload your call list</h2>
+          <h2 className="text-lg font-medium text-[#fffbf4] mb-2">Upload your call list</h2>
           <p className="text-[#8899AA] mb-6 text-[13px]">
             CSV with columns: company name, country, industry, company size
           </p>
-          <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00D68F] text-[#0B1B2B] rounded-lg cursor-pointer hover:bg-[#00C282] transition-colors text-[13px] font-medium">
+          <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#c4b1f9] text-[#0B1B2B] rounded-lg cursor-pointer hover:bg-[#b39df7] transition-colors text-[13px] font-medium">
             {loading ? (
               <span className="flex items-center gap-2">
                 <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@ export default function DailyCallList({
             </div>
             <div className="w-full h-[3px] bg-white/[0.06] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#00D68F] transition-all duration-300 rounded-full"
+                className="h-full bg-[#c4b1f9] transition-all duration-300 rounded-full"
                 style={{ width: `${(completedCount / briefs.length) * 100}%` }}
               />
             </div>
@@ -154,7 +154,7 @@ export default function DailyCallList({
                 if (currentIndex < briefs.length - 1) setCurrentIndex((i) => i + 1)
               }}
               disabled={currentIndex >= briefs.length - 1}
-              className="px-5 py-2 rounded-lg text-[12px] font-medium bg-[#00D68F] text-[#0B1B2B] hover:bg-[#00C282] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="px-5 py-2 rounded-lg text-[12px] font-medium bg-[#c4b1f9] text-[#0B1B2B] hover:bg-[#b39df7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
               Next →
             </button>
@@ -163,7 +163,7 @@ export default function DailyCallList({
           <div className="text-center mt-8">
             <button
               onClick={() => { setBriefs([]); setCurrentIndex(0) }}
-              className="text-[12px] text-[#8899AA] hover:text-white underline"
+              className="text-[12px] text-[#8899AA] hover:text-[#fffbf4] underline"
             >
               Upload new call list
             </button>
@@ -179,7 +179,7 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
     <div className="bg-[#1A2D42] rounded-xl border border-white/[0.08] overflow-hidden">
       <div className="px-5 py-4 border-b border-white/[0.08] flex items-start justify-between">
         <div>
-          <h2 className="text-[17px] font-medium text-white">{brief.company}</h2>
+          <h2 className="text-[17px] font-medium text-[#fffbf4]">{brief.company}</h2>
           <p className="text-[12px] text-[#8899AA] mt-0.5">
             {brief.country} · {brief.industry} · {brief.company_size} employees
           </p>
@@ -199,16 +199,16 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
       <div className="px-5 py-4 space-y-3">
         <p className="text-[12px] text-[#8899AA]">{brief.icp_reason}</p>
         <div className="grid gap-2.5 sm:grid-cols-2">
-          <Section label="ICP" primary={brief.who_to_ask} secondary={brief.who_reason} />
-          <Section label="Lead with" primary={brief.lead_with} />
-          <Section label="Expect" primary={brief.expect_objection} />
-          <Section label="Counter" primary={brief.counter} />
+          <Section label="ICP" labelColor="text-[#c4b1f9]" primary={brief.who_to_ask} secondary={brief.who_reason} />
+          <Section label="Lead with" labelColor="text-[#ffe27c]" bulletColor="text-[#ffe27c]" primary={brief.lead_with} />
+          <Section label="Expect" labelColor="text-red-400" primary={brief.expect_objection} />
+          <Section label="Counter" labelColor="text-[#00D68F]" primary={brief.counter} />
         </div>
-        <div className="bg-[#00D68F]/[0.08] rounded-lg px-4 py-3 border border-[#00D68F]/[0.15]">
-          <div className="text-[10px] font-medium text-[#00D68F] uppercase tracking-wider mb-1">
+        <div className="bg-[#c4b1f9]/[0.08] rounded-lg px-4 py-3 border border-[#c4b1f9]/[0.15]">
+          <div className="text-[10px] font-medium text-[#c4b1f9] uppercase tracking-wider mb-1">
             Call goal
           </div>
-          <p className="text-[12px] text-white font-medium">{brief.call_goal}</p>
+          <p className="text-[12px] text-[#fffbf4] font-medium">{brief.call_goal}</p>
         </div>
       </div>
 
@@ -237,7 +237,7 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
               <div className="flex gap-1.5">
                 <button
                   onClick={() => logFeedback(true)}
-                  className="px-3.5 py-1.5 rounded-md text-[12px] font-medium bg-[#00D68F]/15 text-[#00D68F] hover:bg-[#00D68F]/25 transition-colors"
+                  className="px-3.5 py-1.5 rounded-md text-[12px] font-medium bg-[#c4b1f9]/15 text-[#c4b1f9] hover:bg-[#c4b1f9]/25 transition-colors"
                 >
                   👍 Useful
                 </button>
@@ -262,24 +262,25 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
   )
 }
 
-function Section({ label, primary, secondary }) {
+function Section({ label, labelColor, bulletColor, primary, secondary }) {
   const hasBullets = typeof primary === 'string' && primary.includes('•')
+  const bColor = bulletColor || 'text-[#c4b1f9]'
   return (
     <div className="bg-white/[0.03] rounded-lg px-4 py-3 border border-white/[0.08]">
-      <div className="text-[10px] font-medium text-[#8899AA] uppercase tracking-wider mb-1.5">
+      <div className={`text-[10px] font-medium uppercase tracking-wider mb-1.5 ${labelColor || 'text-[#8899AA]'}`}>
         {label}
       </div>
       {hasBullets ? (
-        <ul className="text-[12px] text-white space-y-0.5">
+        <ul className="text-[12px] text-[#fffbf4] space-y-0.5">
           {primary.split('•').filter(s => s.trim()).map((item, i) => (
             <li key={i} className="flex items-start gap-1.5">
-              <span className="text-[#00D68F] mt-0.5">•</span>
+              <span className={`${bColor} mt-0.5`}>•</span>
               <span>{item.trim()}</span>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-[12px] text-white leading-relaxed">{primary}</p>
+        <p className="text-[12px] text-[#fffbf4] leading-relaxed">{primary}</p>
       )}
       {secondary && <p className="text-[11px] text-[#8899AA] mt-1">{secondary}</p>}
     </div>
