@@ -63,55 +63,19 @@ export default function QuickLookup() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-lg font-medium text-[#fffbf4] mb-5">Quick company lookup</h2>
+      <h1 className="text-xl font-medium text-[#F0EDE6] tracking-tight mb-6">Quick company lookup</h1>
 
-      <form onSubmit={handleSubmit} className="bg-[#1A2D42] rounded-xl border border-white/[0.08] p-5 mb-5">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <div>
-            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">Company name</label>
-            <input
-              type="text"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              placeholder="e.g. Kavak"
-              className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2 text-[13px] text-[#fffbf4] placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#c4b1f9] focus:border-transparent"
-            />
-          </div>
-          <div>
-            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">Country</label>
-            <input
-              type="text"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              placeholder="e.g. Mexico"
-              className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2 text-[13px] text-[#fffbf4] placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#c4b1f9] focus:border-transparent"
-            />
-          </div>
-          <div>
-            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">Industry</label>
-            <input
-              type="text"
-              value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
-              placeholder="e.g. Fintech"
-              className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2 text-[13px] text-[#fffbf4] placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#c4b1f9] focus:border-transparent"
-            />
-          </div>
-          <div>
-            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">Company size</label>
-            <input
-              type="text"
-              value={companySize}
-              onChange={(e) => setCompanySize(e.target.value)}
-              placeholder="e.g. 201-500"
-              className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2 text-[13px] text-[#fffbf4] placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#c4b1f9] focus:border-transparent"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="bg-[#1A1F2E] rounded-[14px] border border-white/[0.06] p-6 mb-6 hover:border-white/[0.1] transition-colors duration-200">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Company name" placeholder="e.g. Kavak" value={companyName} onChange={setCompanyName} icon="ti-building" />
+          <Field label="Country" placeholder="e.g. Mexico" value={country} onChange={setCountry} icon="ti-map-pin" />
+          <Field label="Industry" placeholder="e.g. Fintech" value={industry} onChange={setIndustry} icon="ti-category" />
+          <Field label="Company size" placeholder="e.g. 201-500" value={companySize} onChange={setCompanySize} icon="ti-users" />
         </div>
         <button
           type="submit"
           disabled={loading || !companyName.trim() || !country.trim() || !industry.trim() || !companySize.trim()}
-          className="mt-4 w-full py-2.5 rounded-lg text-[13px] font-medium bg-[#c4b1f9] text-[#0B1B2B] hover:bg-[#b39df7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          className="mt-5 w-full py-3 rounded-lg text-[13px] font-medium bg-gradient-to-r from-[#c4b1f9] to-[#a78bfa] text-[#0A0E1A] hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 flex items-center justify-center gap-2 shadow-lg shadow-[#c4b1f9]/[0.1]"
         >
           {loading ? (
             <>
@@ -122,7 +86,10 @@ export default function QuickLookup() {
               Generating brief...
             </>
           ) : (
-            'Get pre-call brief'
+            <>
+              <i className="ti ti-sparkles text-[15px]" />
+              Get pre-call brief
+            </>
           )}
         </button>
       </form>
@@ -136,16 +103,34 @@ export default function QuickLookup() {
             logOutcome={logOutcome}
             logFeedback={logFeedback}
           />
-          <div className="text-center mt-5">
+          <div className="text-center mt-6">
             <button
               onClick={() => { setBrief(null); setCompanyName(''); setCountry(''); setIndustry(''); setCompanySize('') }}
-              className="text-[12px] text-[#8899AA] hover:text-[#fffbf4] underline"
+              className="text-[12px] text-[#555B6A] hover:text-[#E8E4DC] transition-colors"
             >
               Look up another company
             </button>
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function Field({ label, placeholder, value, onChange, icon }) {
+  return (
+    <div>
+      <label className="block text-[11px] font-medium text-[#7A7F8E] uppercase tracking-wider mb-1.5">{label}</label>
+      <div className="relative">
+        <i className={`ti ${icon} absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#555B6A]`} />
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className="w-full rounded-lg bg-white/[0.04] border border-white/[0.06] pl-9 pr-3 py-2.5 text-[13px] text-[#E8E4DC] placeholder-[#555B6A] focus:outline-none focus:ring-1 focus:ring-[#c4b1f9]/50 focus:border-[#c4b1f9]/30 transition-all duration-150"
+        />
+      </div>
     </div>
   )
 }

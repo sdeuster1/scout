@@ -14,9 +14,9 @@ export default function App() {
   const [outcomeGiven, setOutcomeGiven] = useState({})
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen">
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
-      <main className="max-w-5xl mx-auto px-4 py-8">
+      <main className="max-w-5xl mx-auto px-8 py-8">
         {activeTab === 'calls' && (
           <DailyCallList
             briefs={briefs} setBriefs={setBriefs}
