@@ -368,6 +368,22 @@ Return ONLY valid JSON, no markdown formatting."""
     return {"extracted": extracted, "outcome": data.outcome}
 
 
+def _group_objections_by_industry(rows):
+    grouped = {}
+    for r in rows:
+        ind = r["industry"]
+        if ind not in grouped:
+            grouped[ind] = []
+        if len(grouped[ind]) < 3:
+            grouped[ind].append({
+                "objection": r["objection_heard"],
+                "counter": r["counter_response"],
+                "times": r["times"],
+                "worked": r["worked"],
+            })
+    return [{"industry": k, "objections": v} for k, v in grouped.items()]
+
+
 @app.get("/api/knowledge-base")
 async def knowledge_base():
     conn = get_db()
@@ -384,18 +400,19 @@ async def knowledge_base():
     ).fetchone()["c"]
     accuracy = (useful / total_rated * 100) if total_rated > 0 else 0
 
-    openers = conn.execute(
-        """SELECT opener_used, COUNT(*) as uses,
-           SUM(CASE WHEN outcome = 'SQL' THEN 1 ELSE 0 END) as sql_count
-           FROM calls WHERE opener_used IS NOT NULL
-           GROUP BY opener_used ORDER BY sql_count DESC LIMIT 5"""
+    learnings = conn.execute(
+        """SELECT key_learning, company, industry, outcome, created_at
+           FROM calls WHERE key_learning IS NOT NULL AND key_learning != ''
+           ORDER BY created_at DESC LIMIT 10"""
     ).fetchall()
 
-    objections = conn.execute(
-        """SELECT objection_heard, counter_response, COUNT(*) as times,
+    objections_by_industry = conn.execute(
+        """SELECT industry, objection_heard, counter_response, outcome,
+           COUNT(*) as times,
            SUM(CASE WHEN outcome = 'SQL' THEN 1 ELSE 0 END) as worked
            FROM calls WHERE objection_heard IS NOT NULL
-           GROUP BY objection_heard ORDER BY times DESC LIMIT 5"""
+           GROUP BY industry, objection_heard
+           ORDER BY industry, times DESC"""
     ).fetchall()
 
     titles = conn.execute(
@@ -422,19 +439,16 @@ async def knowledge_base():
         "total_sqls": sqls,
         "win_rate": round(win_rate, 1),
         "brief_accuracy": round(accuracy, 1),
-        "top_openers": [
-            {"opener": r["opener_used"][:120], "uses": r["uses"], "sql_count": r["sql_count"]}
-            for r in openers
-        ],
-        "top_objections": [
+        "key_learnings": [
             {
-                "objection": r["objection_heard"],
-                "counter": r["counter_response"],
-                "times": r["times"],
-                "worked": r["worked"],
+                "learning": r["key_learning"],
+                "company": r["company"],
+                "industry": r["industry"],
+                "outcome": r["outcome"],
             }
-            for r in objections
+            for r in learnings
         ],
+        "objections_by_industry": _group_objections_by_industry(objections_by_industry),
         "best_titles": [
             {
                 "title": r["contact_title"],

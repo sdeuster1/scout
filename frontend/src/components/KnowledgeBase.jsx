@@ -9,6 +9,13 @@ const leaderboard = [
   { name: 'Diego M.', initials: 'DM', sqls: 3, color: 'bg-white/[0.06] text-[#8899AA]' },
 ]
 
+const outcomeBadge = {
+  SQL: 'bg-[#00D68F]/15 text-[#00D68F]',
+  Connected: 'bg-[#ffe27c]/15 text-[#ffe27c]',
+  Gatekeeper: 'bg-red-400/15 text-red-400',
+  'No answer': 'bg-white/[0.06] text-[#8899AA]',
+}
+
 export default function KnowledgeBase() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -63,38 +70,60 @@ export default function KnowledgeBase() {
         </div>
       </Card>
 
-      <Card title="Top performing openers">
-        <div className="space-y-3">
-          {data.top_openers.map((o, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <span className="text-[11px] font-medium text-[#8899AA] mt-0.5 w-4">{i + 1}</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-[12px] text-[#fffbf4]">{o.opener}</p>
-                <p className="text-[11px] text-[#8899AA] mt-0.5">
-                  {o.sql_count} SQLs from {o.uses} uses
-                </p>
+      <Card title="Key learnings from calls" icon="💡">
+        <div className="space-y-0 max-h-[320px] overflow-y-auto pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: '#1A2D42 transparent' }}>
+          {(data.key_learnings || []).map((l, i) => (
+            <div key={i} className="py-3 border-b border-white/[0.06] last:border-0">
+              <p className="text-[13px] text-[#fffbf4] leading-relaxed">"{l.learning}"</p>
+              <div className="flex items-center gap-2 mt-1.5">
+                <span className="text-[11px] text-[#8899AA]">{l.company}</span>
+                <span className="text-[11px] text-[#8899AA]">·</span>
+                <span className="text-[11px] text-[#8899AA]">{l.industry}</span>
+                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${outcomeBadge[l.outcome] || 'bg-white/[0.06] text-[#8899AA]'}`}>
+                  {l.outcome}
+                </span>
               </div>
             </div>
           ))}
+          {(!data.key_learnings || data.key_learnings.length === 0) && (
+            <p className="text-[12px] text-[#8899AA] py-4 text-center">
+              No learnings yet — upload call transcripts to build tribal knowledge
+            </p>
+          )}
         </div>
       </Card>
 
-      <Card title="Most common objections & best counters">
-        <div className="space-y-4">
-          {data.top_objections.map((o, i) => (
-            <div key={i} className="border-b border-white/[0.06] pb-3 last:border-0 last:pb-0">
-              <div className="flex items-start justify-between gap-2">
-                <p className="text-[12px] font-medium text-red-400">"{o.objection}"</p>
-                <span className="text-[11px] text-[#8899AA] whitespace-nowrap">{o.times}x heard</span>
+      <Card title="Objection prep by industry" icon="🛡️">
+        <div className="space-y-5">
+          {(data.objections_by_industry || []).map((group, gi) => (
+            <div key={gi}>
+              <div className="flex items-center gap-2 mb-2.5">
+                <span className="text-[12px] font-medium text-[#c4b1f9]">{group.industry}</span>
+                <div className="flex-1 h-px bg-white/[0.06]" />
               </div>
-              {o.counter && (
-                <p className="text-[12px] text-[#00D68F] mt-1">→ "{o.counter}"</p>
-              )}
-              <p className="text-[11px] text-[#8899AA] mt-0.5">
-                Led to SQL {o.worked} of {o.times} times
-              </p>
+              <div className="space-y-2.5">
+                {group.objections.map((o, i) => (
+                  <div key={i} className="bg-white/[0.03] rounded-lg px-4 py-3 border border-white/[0.06]">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-[12px] text-red-400">"{o.objection}"</p>
+                      <span className="text-[10px] text-[#8899AA] whitespace-nowrap mt-0.5">{o.times}x</span>
+                    </div>
+                    {o.counter && (
+                      <p className="text-[12px] text-[#00D68F] mt-1.5">→ "{o.counter}"</p>
+                    )}
+                    <p className="text-[10px] text-[#8899AA] mt-1">
+                      Led to SQL {o.worked}/{o.times} times
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
+          {(!data.objections_by_industry || data.objections_by_industry.length === 0) && (
+            <p className="text-[12px] text-[#8899AA] py-4 text-center">
+              No objection data yet — log call outcomes to build prep cards
+            </p>
+          )}
         </div>
       </Card>
 
