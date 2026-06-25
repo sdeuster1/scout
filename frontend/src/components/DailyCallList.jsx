@@ -277,23 +277,28 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
 }
 
 function Section({ label, labelColor, bulletColor, primary, secondary }) {
-  const hasBullets = typeof primary === 'string' && primary.includes('•')
+  const text = typeof primary === 'string' ? primary : ''
+  const hasBullets = text.includes('•') || text.includes('\n')
+  const items = hasBullets
+    ? text.split(/[•\n]/).map(s => s.trim()).filter(Boolean)
+    : []
+
   return (
     <div className="bg-white/[0.03] rounded-lg px-4 py-3 border border-white/[0.08]">
       <div className={`text-[10px] font-medium uppercase tracking-wider mb-1.5 ${labelColor || 'text-[#8899AA]'}`}>
         {label}
       </div>
-      {hasBullets ? (
-        <ul className="text-[12px] text-[#fffbf4] space-y-0.5">
-          {primary.split('•').filter(s => s.trim()).map((item, i) => (
-            <li key={i} className="flex items-start gap-1.5">
-              <span style={{ color: bulletColor || '#c4b1f9' }} className="mt-0.5">•</span>
-              <span>{item.trim()}</span>
+      {items.length > 1 ? (
+        <ul className="text-[13px] text-[#fffbf4] space-y-1.5">
+          {items.map((item, i) => (
+            <li key={i} className="flex items-start gap-2">
+              <span style={{ color: bulletColor || '#c4b1f9', fontSize: '8px', lineHeight: '20px' }}>●</span>
+              <span>{item}</span>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-[12px] text-[#fffbf4] leading-relaxed">{primary}</p>
+        <p className="text-[13px] text-[#fffbf4] leading-relaxed">{primary}</p>
       )}
       {secondary && <p className="text-[11px] text-[#8899AA] mt-1">{secondary}</p>}
     </div>
