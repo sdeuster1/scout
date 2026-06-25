@@ -118,9 +118,23 @@ export default function DailyCallList({
         <div>
           <div className="mb-5">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-[12px] text-[#8899AA]">
-                Company {currentIndex + 1} of {briefs.length}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[12px] text-[#8899AA]">
+                  Company {currentIndex + 1} of {briefs.length}
+                </span>
+                <select
+                  value={currentIndex}
+                  onChange={(e) => setCurrentIndex(Number(e.target.value))}
+                  className="bg-[#1A2D42] border border-white/[0.08] rounded-md px-2 py-1 text-[12px] text-[#fffbf4] focus:outline-none focus:ring-1 focus:ring-[#c4b1f9] cursor-pointer appearance-none"
+                  style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238899AA'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 8px center', paddingRight: '24px' }}
+                >
+                  {briefs.map((b, i) => (
+                    <option key={i} value={i}>
+                      {b.company}{outcomeGiven[b.id] ? ` ✓` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <span className="text-[12px] text-[#8899AA]">
                 {completedCount} calls completed
               </span>
@@ -200,7 +214,7 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
         <p className="text-[12px] text-[#8899AA]">{brief.icp_reason}</p>
         <div className="grid gap-2.5 sm:grid-cols-2">
           <Section label="ICP" labelColor="text-[#c4b1f9]" primary={brief.who_to_ask} secondary={brief.who_reason} />
-          <Section label="Lead with" labelColor="text-[#ffe27c]" bulletColor="text-[#ffe27c]" primary={brief.lead_with} />
+          <Section label="Lead with" labelColor="text-[#ffe27c]" bulletColor="#ffe27c" primary={brief.lead_with} />
           <Section label="Expect" labelColor="text-red-400" primary={brief.expect_objection} />
           <Section label="Counter" labelColor="text-[#00D68F]" primary={brief.counter} />
         </div>
@@ -264,7 +278,6 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
 
 function Section({ label, labelColor, bulletColor, primary, secondary }) {
   const hasBullets = typeof primary === 'string' && primary.includes('•')
-  const bColor = bulletColor || 'text-[#c4b1f9]'
   return (
     <div className="bg-white/[0.03] rounded-lg px-4 py-3 border border-white/[0.08]">
       <div className={`text-[10px] font-medium uppercase tracking-wider mb-1.5 ${labelColor || 'text-[#8899AA]'}`}>
@@ -274,7 +287,7 @@ function Section({ label, labelColor, bulletColor, primary, secondary }) {
         <ul className="text-[12px] text-[#fffbf4] space-y-0.5">
           {primary.split('•').filter(s => s.trim()).map((item, i) => (
             <li key={i} className="flex items-start gap-1.5">
-              <span className={`${bColor} mt-0.5`}>•</span>
+              <span style={{ color: bulletColor || '#c4b1f9' }} className="mt-0.5">•</span>
               <span>{item.trim()}</span>
             </li>
           ))}
