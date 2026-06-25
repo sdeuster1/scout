@@ -221,7 +221,7 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
       <div className="px-6 py-5">
         <p className="text-[13px] text-[#7A7F8E] leading-relaxed mb-4">{brief.icp_reason}</p>
         <div className="grid gap-3 sm:grid-cols-2 mb-4">
-          <Section label="ICP" icon="ti-user-check" labelCls="text-[#c4b1f9]" primary={brief.who_to_ask} secondary={brief.who_reason} bold />
+          <Section label="ICP" icon="ti-user-check" labelCls="text-[#c4b1f9]" primary={brief.who_to_ask} secondary={brief.who_reason} bold brightPrimary />
           <Section label="Lead with" icon="ti-bulb" labelCls="text-[#ffe27c]" bulletColor="#ffe27c" primary={brief.lead_with} asBullets />
           <Section label="Objections" icon="ti-alert-triangle" labelCls="text-[#F87171]" primary={brief.expect_objection} />
           <Section label="Counter" icon="ti-shield-check" labelCls="text-[#34D399]" primary={brief.counter} />
@@ -285,16 +285,18 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
   )
 }
 
-function Section({ label, icon, labelCls, bulletColor, primary, secondary, bold, asBullets }) {
+function Section({ label, icon, labelCls, bulletColor, primary, secondary, bold, asBullets, brightPrimary }) {
   const text = typeof primary === 'string' ? primary : ''
   let items = []
   if (text.includes('•') || text.includes('\n')) {
     items = text.split(/[•\n]/).map(s => s.trim()).filter(Boolean)
   } else if (asBullets && text.includes('?')) {
-    items = text.split('?').map(s => s.trim()).filter(Boolean).map(s => s.endsWith('?') ? s : s + '?')
+    items = text.split(/\?\s*/).map(s => s.trim()).filter(Boolean).map(s => s + '?')
   } else if (asBullets) {
     items = text.split(/\.\s+/).map(s => s.trim()).filter(Boolean)
   }
+
+  const bulletHex = bulletColor || '#c4b1f9'
 
   return (
     <div className="bg-white/[0.02] rounded-[10px] px-5 py-4 border border-white/[0.06] hover:bg-white/[0.035] transition-colors duration-150">
@@ -302,16 +304,19 @@ function Section({ label, icon, labelCls, bulletColor, primary, secondary, bold,
         <i className={`ti ${icon} text-[14px]`} /> {label}
       </div>
       {items.length > 1 ? (
-        <ul className="text-[14px] text-[#E8E4DC] space-y-3">
+        <ul className="list-none p-0 m-0 space-y-3">
           {items.map((item, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <span className="w-[7px] h-[7px] rounded-full mt-[7px] flex-shrink-0" style={{ background: bulletColor || '#c4b1f9' }} />
-              <span className="leading-relaxed">{item}</span>
+            <li key={i} className="flex items-start gap-3" style={{ display: 'flex' }}>
+              <span
+                className="flex-shrink-0 mt-[6px]"
+                style={{ width: 8, height: 8, borderRadius: '50%', background: bulletHex }}
+              />
+              <span className="text-[14px] leading-relaxed" style={{ color: bulletHex }}>{item}</span>
             </li>
           ))}
         </ul>
       ) : (
-        <p className={`text-[14px] text-[#E8E4DC] leading-relaxed ${bold ? 'font-medium' : ''}`}>{primary}</p>
+        <p className={`text-[14px] leading-relaxed ${bold ? 'font-semibold' : ''} ${brightPrimary ? 'text-[#F0EDE6]' : 'text-[#E8E4DC]'}`}>{primary}</p>
       )}
       {secondary && <p className="text-[12px] text-[#7A7F8E] mt-1.5 leading-relaxed">{secondary}</p>}
     </div>
