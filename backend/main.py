@@ -60,14 +60,6 @@ def send_slack_notification(company: str, country: str):
         print(f"Slack notification failed: {e}")
 
 
-@app.get("/api/test-slack")
-async def test_slack():
-    if not SLACK_WEBHOOK_URL:
-        return {"error": "SLACK_WEBHOOK_URL not set"}
-    send_slack_notification("Test Company", "Test Country")
-    return {"status": "sent", "webhook_set": bool(SLACK_WEBHOOK_URL)}
-
-
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     return JSONResponse(status_code=500, content={"detail": str(exc)})
