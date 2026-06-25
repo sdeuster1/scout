@@ -63,55 +63,55 @@ export default function QuickLookup() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold text-gray-800 mb-6">Quick Company Lookup</h2>
+      <h2 className="text-lg font-medium text-white mb-5">Quick company lookup</h2>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-        <div className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={handleSubmit} className="bg-[#1A2D42] rounded-xl border border-white/[0.08] p-5 mb-5">
+        <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Company name</label>
+            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">Company name</label>
             <input
               type="text"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               placeholder="e.g. Kavak"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ade80] focus:border-transparent"
+              className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2 text-[13px] text-white placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#00D68F] focus:border-transparent"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">Country</label>
             <input
               type="text"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
               placeholder="e.g. Mexico"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ade80] focus:border-transparent"
+              className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2 text-[13px] text-white placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#00D68F] focus:border-transparent"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">Industry</label>
             <input
               type="text"
               value={industry}
               onChange={(e) => setIndustry(e.target.value)}
               placeholder="e.g. Fintech"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ade80] focus:border-transparent"
+              className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2 text-[13px] text-white placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#00D68F] focus:border-transparent"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Company size</label>
+            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">Company size</label>
             <input
               type="text"
               value={companySize}
               onChange={(e) => setCompanySize(e.target.value)}
               placeholder="e.g. 201-500"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ade80] focus:border-transparent"
+              className="w-full rounded-lg bg-white/[0.05] border border-white/[0.08] px-3 py-2 text-[13px] text-white placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#00D68F] focus:border-transparent"
             />
           </div>
         </div>
         <button
           type="submit"
           disabled={loading || !companyName.trim() || !country.trim() || !industry.trim() || !companySize.trim()}
-          className="mt-4 w-full py-2.5 rounded-lg text-sm font-medium bg-black text-white hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          className="mt-4 w-full py-2.5 rounded-lg text-[13px] font-medium bg-[#00D68F] text-[#0B1B2B] hover:bg-[#00C282] disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
         >
           {loading ? (
             <>
@@ -122,7 +122,7 @@ export default function QuickLookup() {
               Generating brief...
             </>
           ) : (
-            'Get Pre-Call Brief'
+            'Get pre-call brief'
           )}
         </button>
       </form>
@@ -136,10 +136,10 @@ export default function QuickLookup() {
             logOutcome={logOutcome}
             logFeedback={logFeedback}
           />
-          <div className="text-center mt-6">
+          <div className="text-center mt-5">
             <button
               onClick={() => { setBrief(null); setCompanyName(''); setCountry(''); setIndustry(''); setCompanySize('') }}
-              className="text-sm text-gray-400 hover:text-gray-600 underline"
+              className="text-[12px] text-[#8899AA] hover:text-white underline"
             >
               Look up another company
             </button>

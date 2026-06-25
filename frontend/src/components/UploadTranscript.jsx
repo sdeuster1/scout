@@ -42,12 +42,12 @@ export default function UploadTranscript() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-xl font-semibold text-gray-800 mb-6">Upload Call Transcript</h2>
+      <h2 className="text-lg font-medium text-white mb-5">Upload call transcript</h2>
 
       {!result ? (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-[12px] font-medium text-[#8899AA] mb-1">
               Paste transcript or upload .txt file
             </label>
             <textarea
@@ -55,9 +55,9 @@ export default function UploadTranscript() {
               onChange={(e) => setTranscript(e.target.value)}
               rows={10}
               placeholder="Paste your call transcript here..."
-              className="w-full rounded-lg border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#4ade80] focus:border-transparent resize-none"
+              className="w-full rounded-lg bg-[#1A2D42] border border-white/[0.08] px-4 py-3 text-[13px] text-white placeholder-[#556677] focus:outline-none focus:ring-1 focus:ring-[#00D68F] focus:border-transparent resize-none"
             />
-            <label className="inline-flex items-center gap-1.5 mt-2 text-sm text-gray-500 cursor-pointer hover:text-gray-700">
+            <label className="inline-flex items-center gap-1.5 mt-2 text-[12px] text-[#8899AA] cursor-pointer hover:text-white">
               📎 Upload .txt file
               <input
                 ref={fileRef}
@@ -70,18 +70,18 @@ export default function UploadTranscript() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-[12px] font-medium text-[#8899AA] mb-2">
               Call outcome
             </label>
-            <div className="flex gap-2">
+            <div className="flex gap-1.5">
               {outcomeOptions.map((o) => (
                 <button
                   key={o}
                   onClick={() => setOutcome(o)}
-                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-3.5 py-1.5 rounded-md text-[12px] font-medium transition-colors ${
                     outcome === o
-                      ? 'bg-black text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ? 'bg-[#00D68F] text-[#0B1B2B]'
+                      : 'bg-white/[0.05] text-[#8899AA] hover:bg-white/[0.1]'
                   }`}
                 >
                   {o}
@@ -93,7 +93,7 @@ export default function UploadTranscript() {
           <button
             onClick={handleSubmit}
             disabled={!transcript.trim() || loading}
-            className="w-full py-2.5 rounded-lg text-sm font-medium bg-black text-white hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded-lg text-[13px] font-medium bg-[#00D68F] text-[#0B1B2B] hover:bg-[#00C282] disabled:opacity-30 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -104,16 +104,16 @@ export default function UploadTranscript() {
                 Analyzing transcript...
               </>
             ) : (
-              'Analyze & Store'
+              'Analyze & store'
             )}
           </button>
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+          <div className="bg-[#1A2D42] rounded-xl border border-white/[0.08] p-5">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-[#4ade80] text-lg">✓</span>
-              <h3 className="font-semibold text-gray-800">Transcript analyzed and stored</h3>
+              <span className="text-[#00D68F] text-lg">✓</span>
+              <h3 className="font-medium text-white text-[14px]">Transcript analyzed and stored</h3>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label="Company" value={result.company} />
@@ -123,30 +123,14 @@ export default function UploadTranscript() {
               <Field label="Contact" value={result.contact_title} />
               <Field label="Outcome" value={outcome} />
             </div>
-            {result.opener_used && (
-              <div className="mt-4">
-                <Field label="Opener used" value={result.opener_used} full />
-              </div>
-            )}
-            {result.objection_heard && (
-              <div className="mt-3">
-                <Field label="Objection" value={result.objection_heard} full />
-              </div>
-            )}
-            {result.counter_response && (
-              <div className="mt-3">
-                <Field label="Counter" value={result.counter_response} full />
-              </div>
-            )}
-            {result.key_learning && (
-              <div className="mt-3">
-                <Field label="Key learning" value={result.key_learning} full />
-              </div>
-            )}
+            {result.opener_used && <div className="mt-3"><Field label="Opener used" value={result.opener_used} /></div>}
+            {result.objection_heard && <div className="mt-3"><Field label="Objection" value={result.objection_heard} /></div>}
+            {result.counter_response && <div className="mt-3"><Field label="Counter" value={result.counter_response} /></div>}
+            {result.key_learning && <div className="mt-3"><Field label="Key learning" value={result.key_learning} /></div>}
           </div>
           <button
             onClick={() => setResult(null)}
-            className="w-full py-2.5 rounded-lg text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+            className="w-full py-2.5 rounded-lg text-[13px] font-medium bg-white/[0.05] text-[#8899AA] hover:bg-white/[0.1] transition-colors"
           >
             Upload another transcript
           </button>
@@ -156,11 +140,11 @@ export default function UploadTranscript() {
   )
 }
 
-function Field({ label, value, full }) {
+function Field({ label, value }) {
   return (
-    <div className={full ? '' : ''}>
-      <p className="text-xs font-medium text-gray-400 uppercase tracking-wide">{label}</p>
-      <p className="text-sm text-gray-800 mt-0.5">{value || '—'}</p>
+    <div>
+      <p className="text-[10px] font-medium text-[#8899AA] uppercase tracking-wider">{label}</p>
+      <p className="text-[13px] text-white mt-0.5">{value || '—'}</p>
     </div>
   )
 }

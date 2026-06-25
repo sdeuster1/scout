@@ -2,18 +2,18 @@ import { useState, useRef } from 'react'
 import { api } from '../api'
 
 const outcomes = [
-  { label: 'SQL', color: 'bg-[#4ade80] text-black' },
-  { label: 'Connected', color: 'bg-amber-400 text-black' },
+  { label: 'SQL', color: 'bg-[#00D68F] text-[#0B1B2B]' },
+  { label: 'Connected', color: 'bg-amber-400 text-[#0B1B2B]' },
   { label: 'Gatekeeper', color: 'bg-red-400 text-white' },
-  { label: 'No answer', color: 'bg-gray-300 text-gray-700' },
+  { label: 'No answer', color: 'bg-white/[0.1] text-[#8899AA]' },
 ]
 
 function ScoreBadge({ score }) {
-  let color = 'bg-red-100 text-red-700'
-  if (score >= 8) color = 'bg-green-100 text-green-700'
-  else if (score >= 5) color = 'bg-amber-100 text-amber-700'
+  let color = 'bg-red-400/15 text-red-400'
+  if (score >= 8) color = 'bg-[#00D68F]/15 text-[#00D68F]'
+  else if (score >= 5) color = 'bg-amber-400/15 text-amber-400'
   return (
-    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-sm font-semibold ${color}`}>
+    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-semibold ${color}`}>
       {score}/10
     </span>
   )
@@ -86,11 +86,11 @@ export default function DailyCallList({
       {briefs.length === 0 && (
         <div className="text-center py-20">
           <div className="text-5xl mb-4">📋</div>
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">Upload your call list</h2>
-          <p className="text-gray-500 mb-6 text-sm">
+          <h2 className="text-lg font-medium text-white mb-2">Upload your call list</h2>
+          <p className="text-[#8899AA] mb-6 text-[13px]">
             CSV with columns: company name, country, industry, company size
           </p>
-          <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
+          <label className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#00D68F] text-[#0B1B2B] rounded-lg cursor-pointer hover:bg-[#00C282] transition-colors text-[13px] font-medium">
             {loading ? (
               <span className="flex items-center gap-2">
                 <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
@@ -116,18 +116,18 @@ export default function DailyCallList({
 
       {briefs.length > 0 && brief && (
         <div>
-          <div className="mb-6">
+          <div className="mb-5">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-500">
+              <span className="text-[12px] text-[#8899AA]">
                 Company {currentIndex + 1} of {briefs.length}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-[12px] text-[#8899AA]">
                 {completedCount} calls completed
               </span>
             </div>
-            <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+            <div className="w-full h-[3px] bg-white/[0.06] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#4ade80] transition-all duration-300 rounded-full"
+                className="h-full bg-[#00D68F] transition-all duration-300 rounded-full"
                 style={{ width: `${(completedCount / briefs.length) * 100}%` }}
               />
             </div>
@@ -141,11 +141,11 @@ export default function DailyCallList({
             logFeedback={logFeedback}
           />
 
-          <div className="flex justify-between items-center mt-6">
+          <div className="flex justify-between items-center mt-5">
             <button
               onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
               disabled={currentIndex === 0}
-              className="px-6 py-2.5 rounded-lg text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="px-5 py-2 rounded-lg text-[12px] font-medium bg-[#1A2D42] border border-white/[0.08] text-[#8899AA] hover:bg-[#223548] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
               ← Previous
             </button>
@@ -154,7 +154,7 @@ export default function DailyCallList({
                 if (currentIndex < briefs.length - 1) setCurrentIndex((i) => i + 1)
               }}
               disabled={currentIndex >= briefs.length - 1}
-              className="px-6 py-2.5 rounded-lg text-sm font-medium bg-black text-white hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="px-5 py-2 rounded-lg text-[12px] font-medium bg-[#00D68F] text-[#0B1B2B] hover:bg-[#00C282] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
               Next →
             </button>
@@ -163,7 +163,7 @@ export default function DailyCallList({
           <div className="text-center mt-8">
             <button
               onClick={() => { setBriefs([]); setCurrentIndex(0) }}
-              className="text-sm text-gray-400 hover:text-gray-600 underline"
+              className="text-[12px] text-[#8899AA] hover:text-white underline"
             >
               Upload new call list
             </button>
@@ -176,18 +176,18 @@ export default function DailyCallList({
 
 export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logFeedback }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-100 flex items-start justify-between">
+    <div className="bg-[#1A2D42] rounded-xl border border-white/[0.08] overflow-hidden">
+      <div className="px-5 py-4 border-b border-white/[0.08] flex items-start justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-gray-900">{brief.company}</h2>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h2 className="text-[17px] font-medium text-white">{brief.company}</h2>
+          <p className="text-[12px] text-[#8899AA] mt-0.5">
             {brief.country} · {brief.industry} · {brief.company_size} employees
           </p>
         </div>
         <div className="flex items-center gap-3">
           <ScoreBadge score={brief.icp_score} />
           {outcomeGiven?.[brief.id] && (
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
+            <span className={`px-2.5 py-1 rounded-full text-[11px] font-medium ${
               outcomes.find(o => o.label === outcomeGiven[brief.id])?.color || ''
             }`}>
               {outcomeGiven[brief.id]}
@@ -196,31 +196,33 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
         </div>
       </div>
 
-      <div className="px-6 py-5 space-y-4">
-        <p className="text-sm text-gray-500">{brief.icp_reason}</p>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Section icon="👤" label="ICP" primary={brief.who_to_ask} secondary={brief.who_reason} />
-          <Section icon="🎯" label="LEAD WITH" primary={brief.lead_with} />
-          <Section icon="⚡" label="EXPECT" primary={brief.expect_objection} />
-          <Section icon="💬" label="COUNTER" primary={brief.counter} />
+      <div className="px-5 py-4 space-y-3">
+        <p className="text-[12px] text-[#8899AA]">{brief.icp_reason}</p>
+        <div className="grid gap-2.5 sm:grid-cols-2">
+          <Section label="ICP" primary={brief.who_to_ask} secondary={brief.who_reason} />
+          <Section label="Lead with" primary={brief.lead_with} />
+          <Section label="Expect" primary={brief.expect_objection} />
+          <Section label="Counter" primary={brief.counter} />
         </div>
-        <div className="bg-gray-50 rounded-lg px-4 py-3">
-          <div className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Call Goal</div>
-          <p className="text-sm text-gray-800 font-medium">{brief.call_goal}</p>
+        <div className="bg-[#00D68F]/[0.08] rounded-lg px-4 py-3 border border-[#00D68F]/[0.15]">
+          <div className="text-[10px] font-medium text-[#00D68F] uppercase tracking-wider mb-1">
+            Call goal
+          </div>
+          <p className="text-[12px] text-white font-medium">{brief.call_goal}</p>
         </div>
       </div>
 
       {logOutcome && logFeedback && (
-        <div className="px-6 py-4 border-t border-gray-100 space-y-3">
+        <div className="px-5 py-3 border-t border-white/[0.08] space-y-3">
           {!outcomeGiven?.[brief.id] && (
             <div>
-              <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">Log outcome</p>
-              <div className="flex gap-2 flex-wrap">
+              <p className="text-[10px] font-medium text-[#8899AA] uppercase tracking-wider mb-2">Log outcome</p>
+              <div className="flex gap-1.5 flex-wrap">
                 {outcomes.map((o) => (
                   <button
                     key={o.label}
                     onClick={() => logOutcome(o.label)}
-                    className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${o.color} hover:opacity-80`}
+                    className={`px-3.5 py-1.5 rounded-md text-[12px] font-medium transition-colors ${o.color} hover:opacity-80`}
                   >
                     {o.label}
                   </button>
@@ -231,17 +233,17 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
 
           {outcomeGiven?.[brief.id] && feedbackGiven?.[brief.id] === undefined && (
             <div>
-              <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">Was this brief useful?</p>
-              <div className="flex gap-2">
+              <p className="text-[10px] font-medium text-[#8899AA] uppercase tracking-wider mb-2">Was this brief useful?</p>
+              <div className="flex gap-1.5">
                 <button
                   onClick={() => logFeedback(true)}
-                  className="px-4 py-1.5 rounded-lg text-sm font-medium bg-green-50 text-green-700 hover:bg-green-100 transition-colors"
+                  className="px-3.5 py-1.5 rounded-md text-[12px] font-medium bg-[#00D68F]/15 text-[#00D68F] hover:bg-[#00D68F]/25 transition-colors"
                 >
                   👍 Useful
                 </button>
                 <button
                   onClick={() => logFeedback(false)}
-                  className="px-4 py-1.5 rounded-lg text-sm font-medium bg-red-50 text-red-700 hover:bg-red-100 transition-colors"
+                  className="px-3.5 py-1.5 rounded-md text-[12px] font-medium bg-red-400/15 text-red-400 hover:bg-red-400/25 transition-colors"
                 >
                   👎 Not useful
                 </button>
@@ -250,7 +252,7 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
           )}
 
           {feedbackGiven?.[brief.id] !== undefined && (
-            <p className="text-sm text-gray-400">
+            <p className="text-[12px] text-[#8899AA]">
               Feedback recorded — {feedbackGiven[brief.id] ? 'marked useful' : 'marked not useful'}
             </p>
           )}
@@ -260,26 +262,26 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
   )
 }
 
-function Section({ icon, label, primary, secondary }) {
+function Section({ label, primary, secondary }) {
   const hasBullets = typeof primary === 'string' && primary.includes('•')
   return (
-    <div className="bg-gray-50 rounded-lg px-4 py-3">
-      <div className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">
-        {icon} {label}
+    <div className="bg-white/[0.03] rounded-lg px-4 py-3 border border-white/[0.08]">
+      <div className="text-[10px] font-medium text-[#8899AA] uppercase tracking-wider mb-1.5">
+        {label}
       </div>
       {hasBullets ? (
-        <ul className="text-sm text-gray-800 space-y-0.5">
+        <ul className="text-[12px] text-white space-y-0.5">
           {primary.split('•').filter(s => s.trim()).map((item, i) => (
             <li key={i} className="flex items-start gap-1.5">
-              <span className="text-[#4ade80] mt-0.5">•</span>
+              <span className="text-[#00D68F] mt-0.5">•</span>
               <span>{item.trim()}</span>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-sm text-gray-800">{primary}</p>
+        <p className="text-[12px] text-white leading-relaxed">{primary}</p>
       )}
-      {secondary && <p className="text-xs text-gray-500 mt-1">{secondary}</p>}
+      {secondary && <p className="text-[11px] text-[#8899AA] mt-1">{secondary}</p>}
     </div>
   )
 }

@@ -1,33 +1,33 @@
 const tabs = [
-  { id: 'calls', label: 'Daily Call List' },
-  { id: 'quick', label: 'Quick Lookup' },
-  { id: 'transcript', label: 'Upload Transcript' },
-  { id: 'knowledge', label: 'Knowledge Base' },
+  { id: 'calls', label: 'Daily call list' },
+  { id: 'quick', label: 'Quick lookup' },
+  { id: 'transcript', label: 'Upload transcript' },
+  { id: 'knowledge', label: 'Knowledge base' },
 ]
 
 export default function Navbar({ activeTab, setActiveTab }) {
   return (
-    <nav className="bg-black text-white">
+    <nav className="bg-[#132337] border-b border-white/[0.08]">
       <div className="max-w-5xl mx-auto px-4">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-12">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#4ade80]" />
-              <span className="text-lg font-semibold tracking-tight">Scout</span>
+              <span className="w-2 h-2 rounded-full bg-[#00D68F]" />
+              <span className="text-[15px] font-semibold tracking-tight text-white">Scout</span>
             </div>
-            <span className="text-xs text-gray-400 hidden sm:inline">
+            <span className="text-[11px] text-[#8899AA] hidden sm:inline">
               pre-call intelligence for LATAM SDRs
             </span>
           </div>
-          <div className="flex gap-1">
+          <div className="flex gap-0.5">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-1.5 rounded text-sm transition-colors ${
+                className={`px-3 py-1.5 rounded-md text-[12px] transition-colors ${
                   activeTab === tab.id
-                    ? 'bg-white/15 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-white/[0.1] text-white'
+                    : 'text-[#8899AA] hover:text-white hover:bg-white/[0.05]'
                 }`}
               >
                 {tab.label}
