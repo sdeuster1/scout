@@ -38,10 +38,13 @@ app.add_middleware(
 client = anthropic.Anthropic()
 
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "")
-SCOUT_URL = os.environ.get("SCOUT_URL", "http://localhost:5173")
+SCOUT_URL = os.environ.get("SCOUT_URL", "https://scout-khaki-nine.vercel.app")
 
 
 def send_slack_notification(company: str, country: str):
+    if not SLACK_WEBHOOK_URL:
+        print("SLACK_WEBHOOK_URL not set, skipping notification")
+        return
     payload = json.dumps({
         "text": f"🎯 *SQL booked!* — *{company}* ({country})\nPlease upload your call transcript: <{SCOUT_URL}|Open Scout — Upload Transcript>"
     }).encode("utf-8")
@@ -51,9 +54,18 @@ def send_slack_notification(company: str, country: str):
         headers={"Content-Type": "application/json"},
     )
     try:
-        urllib.request.urlopen(req)
-    except Exception:
-        pass
+        resp = urllib.request.urlopen(req)
+        print(f"Slack notification sent: {resp.status}")
+    except Exception as e:
+        print(f"Slack notification failed: {e}")
+
+
+@app.get("/api/test-slack")
+async def test_slack():
+    if not SLACK_WEBHOOK_URL:
+        return {"error": "SLACK_WEBHOOK_URL not set"}
+    send_slack_notification("Test Company", "Test Country")
+    return {"status": "sent", "webhook_set": bool(SLACK_WEBHOOK_URL)}
 
 
 @app.exception_handler(Exception)
