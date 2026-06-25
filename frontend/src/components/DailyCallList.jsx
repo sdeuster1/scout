@@ -288,37 +288,53 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
 function Section({ label, icon, labelCls, bulletColor, primary, secondary, bold, asBullets, brightPrimary }) {
   const text = typeof primary === 'string' ? primary : ''
   let items = []
-  if (text.includes('•') || text.includes('\n')) {
+
+  if (asBullets) {
+    if (text.includes('•')) {
+      items = text.split('•').map(s => s.trim()).filter(Boolean)
+    } else if (text.includes('\n')) {
+      items = text.split('\n').map(s => s.trim()).filter(Boolean)
+    } else if (text.includes('?')) {
+      items = text.split(/(?<=\?)\s*/).map(s => s.trim()).filter(Boolean)
+    } else {
+      items = text.split(/(?<=\.)\s+/).map(s => s.trim()).filter(Boolean)
+    }
+    if (items.length === 1) items = [text]
+  } else if (text.includes('•') || text.includes('\n')) {
     items = text.split(/[•\n]/).map(s => s.trim()).filter(Boolean)
-  } else if (asBullets && text.includes('?')) {
-    items = text.split(/\?\s*/).map(s => s.trim()).filter(Boolean).map(s => s + '?')
-  } else if (asBullets) {
-    items = text.split(/\.\s+/).map(s => s.trim()).filter(Boolean)
   }
 
   const bulletHex = bulletColor || '#c4b1f9'
+  const showAsList = asBullets ? items.length >= 1 : items.length > 1
 
   return (
     <div className="bg-white/[0.02] rounded-[10px] px-5 py-4 border border-white/[0.06] hover:bg-white/[0.035] transition-colors duration-150">
       <div className={`text-[10px] font-medium uppercase tracking-widest mb-3 flex items-center gap-1.5 ${labelCls || 'text-[#7A7F8E]'}`}>
         <i className={`ti ${icon} text-[14px]`} /> {label}
       </div>
-      {items.length > 1 ? (
-        <ul className="list-none p-0 m-0 space-y-3">
+      {showAsList ? (
+        <ul className="list-none p-0 m-0" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {items.map((item, i) => (
-            <li key={i} className="flex items-start gap-3" style={{ display: 'flex' }}>
+            <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
               <span
-                className="flex-shrink-0 mt-[6px]"
-                style={{ width: 8, height: 8, borderRadius: '50%', background: bulletHex }}
+                style={{
+                  width: 8,
+                  height: 8,
+                  minWidth: 8,
+                  borderRadius: '50%',
+                  background: bulletHex,
+                  marginTop: 6,
+                  flexShrink: 0,
+                }}
               />
               <span className="text-[14px] leading-relaxed" style={{ color: bulletHex }}>{item}</span>
             </li>
           ))}
         </ul>
       ) : (
-        <p className={`text-[14px] leading-relaxed ${bold ? 'font-semibold' : ''} ${brightPrimary ? 'text-[#F0EDE6]' : 'text-[#E8E4DC]'}`}>{primary}</p>
+        <p className={`text-[15px] leading-relaxed ${bold ? 'font-semibold' : ''} ${brightPrimary ? 'text-[#F0EDE6]' : 'text-[#E8E4DC]'}`}>{primary}</p>
       )}
-      {secondary && <p className="text-[12px] text-[#7A7F8E] mt-1.5 leading-relaxed">{secondary}</p>}
+      {secondary && <p className="text-[13px] text-[#9CA3AF] mt-2 leading-relaxed">{secondary}</p>}
     </div>
   )
 }

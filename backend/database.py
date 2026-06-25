@@ -52,7 +52,9 @@ def init_db():
     conn.commit()
 
     count = conn.execute("SELECT COUNT(*) FROM calls").fetchone()[0]
-    if count == 0:
+    if count < 20:
+        conn.execute("DELETE FROM calls")
+        conn.commit()
         seed_data(conn)
 
     conn.close()
