@@ -197,6 +197,11 @@ export function BriefCard({ brief, outcomeGiven, feedbackGiven, logOutcome, logF
           <p className="text-[12px] text-[#8899AA] mt-0.5">
             {brief.country} · {brief.industry} · {brief.company_size} employees
           </p>
+          {(brief.contact_name || brief.contact_position) && (
+            <p className="text-[12px] text-[#c4b1f9] mt-1">
+              {brief.contact_name}{brief.contact_name && brief.contact_position ? ' — ' : ''}{brief.contact_position}
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <ScoreBadge score={brief.icp_score} />

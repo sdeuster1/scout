@@ -74,7 +74,6 @@ export default function KnowledgeBase() {
                   {o.sql_count} SQLs from {o.uses} uses
                 </p>
               </div>
-              <WinBadge wins={o.sql_count} total={o.uses} />
             </div>
           ))}
         </div>
@@ -99,7 +98,7 @@ export default function KnowledgeBase() {
         </div>
       </Card>
 
-      <Card title="Best contact titles by company size">
+      <Card title="ICP by company size">
         <div className="overflow-x-auto">
           <table className="w-full text-[12px]">
             <thead>
@@ -121,6 +120,41 @@ export default function KnowledgeBase() {
               ))}
             </tbody>
           </table>
+        </div>
+      </Card>
+
+      <Card title="Best industries">
+        <div className="space-y-2">
+          {(data.best_industries || []).map((ind, i) => {
+            const maxTotal = (data.best_industries || [])[0]?.total || 1
+            return (
+              <div key={i} className="flex items-center gap-3">
+                <span className="text-[11px] font-medium text-[#8899AA] w-4">{i + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[12px] text-[#fffbf4]">{ind.industry}</span>
+                    <span className="text-[11px] text-[#8899AA]">
+                      {ind.sqls} SQLs / {ind.total} calls
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 bg-white/[0.06] rounded-full">
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${(ind.total / maxTotal) * 100}%`,
+                        background: ind.win_rate >= 60 ? '#c4b1f9' : ind.win_rate >= 40 ? '#ffe27c' : 'rgba(255,255,255,0.15)',
+                      }}
+                    />
+                  </div>
+                </div>
+                <span className={`text-[12px] font-medium min-w-[36px] text-right ${
+                  ind.win_rate >= 60 ? 'text-[#c4b1f9]' : ind.win_rate >= 40 ? 'text-[#ffe27c]' : 'text-[#8899AA]'
+                }`}>
+                  {ind.win_rate}%
+                </span>
+              </div>
+            )
+          })}
         </div>
       </Card>
 
@@ -163,16 +197,5 @@ function Card({ title, icon, children }) {
       </h3>
       {children}
     </div>
-  )
-}
-
-function WinBadge({ wins, total }) {
-  const rate = total > 0 ? Math.round((wins / total) * 100) : 0
-  return (
-    <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${
-      rate >= 60 ? 'bg-[#c4b1f9]/15 text-[#c4b1f9]' : 'bg-white/[0.06] text-[#8899AA]'
-    }`}>
-      {rate}%
-    </span>
   )
 }

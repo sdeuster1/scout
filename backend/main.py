@@ -117,6 +117,13 @@ async def generate_briefs(file: UploadFile = File(...)):
         elif "size" in fl or "employees" in fl:
             field_map["company_size"] = f
 
+    for f in reader.fieldnames or []:
+        fl = f.strip().lower()
+        if fl in ("contact", "contact name", "contact_name", "name", "person"):
+            field_map["contact_name"] = f
+        elif fl in ("position", "title", "role", "contact_position", "contact_title", "job title", "job_title"):
+            field_map["contact_position"] = f
+
     required = ["company_name", "country", "industry", "company_size"]
     missing = [r for r in required if r not in field_map]
     if missing:
@@ -127,12 +134,17 @@ async def generate_briefs(file: UploadFile = File(...)):
 
     companies = []
     for row in reader:
-        companies.append({
+        comp = {
             "company_name": row[field_map["company_name"]].strip(),
             "country": row[field_map["country"]].strip(),
             "industry": row[field_map["industry"]].strip(),
             "company_size": row[field_map["company_size"]].strip(),
-        })
+        }
+        if "contact_name" in field_map and row.get(field_map["contact_name"], "").strip():
+            comp["contact_name"] = row[field_map["contact_name"]].strip()
+        if "contact_position" in field_map and row.get(field_map["contact_position"], "").strip():
+            comp["contact_position"] = row[field_map["contact_position"]].strip()
+        companies.append(comp)
 
     if not companies:
         raise HTTPException(status_code=400, detail="CSV contains no data rows")
@@ -149,6 +161,8 @@ async def generate_briefs(file: UploadFile = File(...)):
 
     companies_block = "\n".join(
         f"{i+1}. {c['company_name']} | {c['country']} | {c['industry']} | {c['company_size']}"
+        + (f" | Contact: {c['contact_name']}" if c.get('contact_name') else "")
+        + (f", {c['contact_position']}" if c.get('contact_position') else "")
         for i, c in enumerate(companies)
     )
 
@@ -232,7 +246,7 @@ Return ONLY a valid JSON array, no markdown formatting."""
         ).lastrowid
         conn.commit()
 
-        briefs.append({
+        brief_obj = {
             "id": brief_id,
             "company": comp["company_name"],
             "country": comp["country"],
@@ -242,7 +256,12 @@ Return ONLY a valid JSON array, no markdown formatting."""
                 "icp_score", "icp_reason", "who_to_ask", "who_reason",
                 "lead_with", "expect_objection", "counter", "call_goal"
             ]},
-        })
+        }
+        if comp.get("contact_name"):
+            brief_obj["contact_name"] = comp["contact_name"]
+        if comp.get("contact_position"):
+            brief_obj["contact_position"] = comp["contact_position"]
+        briefs.append(brief_obj)
 
     conn.close()
     return {"briefs": briefs, "total": len(briefs)}
@@ -386,6 +405,12 @@ async def knowledge_base():
            GROUP BY contact_title, company_size ORDER BY sql_count DESC LIMIT 8"""
     ).fetchall()
 
+    industries = conn.execute(
+        """SELECT industry, COUNT(*) as total,
+           SUM(CASE WHEN outcome = 'SQL' THEN 1 ELSE 0 END) as sqls
+           FROM calls GROUP BY industry ORDER BY sqls DESC LIMIT 8"""
+    ).fetchall()
+
     countries = conn.execute(
         """SELECT country, COUNT(*) as total,
            SUM(CASE WHEN outcome = 'SQL' THEN 1 ELSE 0 END) as sqls
@@ -418,6 +443,15 @@ async def knowledge_base():
                 "sql_count": r["sql_count"],
             }
             for r in titles
+        ],
+        "best_industries": [
+            {
+                "industry": r["industry"],
+                "total": r["total"],
+                "sqls": r["sqls"],
+                "win_rate": round(r["sqls"] / r["total"] * 100, 1) if r["total"] > 0 else 0,
+            }
+            for r in industries
         ],
         "countries": [
             {
