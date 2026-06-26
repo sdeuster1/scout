@@ -184,7 +184,7 @@ Return a JSON array with one object per company, in the same order. Each object 
 - icp_reason: one sentence explaining the score
 - who_to_ask: specific job title to target
 - who_reason: why this title is the right entry point
-- lead_with: 2-3 short bullet points (each under 10 words) with specific opener angles for this company. Use "• " prefix for each bullet.
+- lead_with: MUST be exactly 3 separate bullet points joined by newline characters. Each bullet starts with "• ". Each under 10 words. Format: "• First angle\n• Second angle\n• Third angle". Never write them as a single paragraph.
 - expect_objection: the most likely objection, one short sentence max
 - counter: a short punchy counter-response, one sentence max (under 20 words)
 - call_goal: what specifically to achieve on this call, one short sentence

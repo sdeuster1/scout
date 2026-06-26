@@ -289,17 +289,22 @@ function Section({ label, icon, labelCls, bulletColor, primary, secondary, bold,
   const text = typeof primary === 'string' ? primary : ''
   let items = []
 
-  if (asBullets) {
+  if (asBullets && text) {
     if (text.includes('•')) {
       items = text.split('•').map(s => s.trim()).filter(Boolean)
     } else if (text.includes('\n')) {
       items = text.split('\n').map(s => s.trim()).filter(Boolean)
-    } else if (text.includes('?')) {
+    } else if (text.includes(' - ')) {
+      items = text.split(' - ').map(s => s.trim()).filter(Boolean)
+    } else if (text.includes('; ')) {
+      items = text.split('; ').map(s => s.trim()).filter(Boolean)
+    } else if ((text.match(/\?/g) || []).length >= 2) {
       items = text.split(/(?<=\?)\s*/).map(s => s.trim()).filter(Boolean)
-    } else {
+    } else if ((text.match(/\./g) || []).length >= 2) {
       items = text.split(/(?<=\.)\s+/).map(s => s.trim()).filter(Boolean)
+    } else {
+      items = [text]
     }
-    if (items.length === 1) items = [text]
   } else if (text.includes('•') || text.includes('\n')) {
     items = text.split(/[•\n]/).map(s => s.trim()).filter(Boolean)
   }
